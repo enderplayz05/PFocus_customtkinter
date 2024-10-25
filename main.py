@@ -46,14 +46,14 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         self.start_stop_button.configure(width=75, height=30)  # ctk uses 'configure' for options
 
         # Timer Customization
-        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)
-        self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")
+        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #work in minutes input, which means its the box that you can have user input
+        self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")      #label/header for work in minutes, 
         self.work_time_input.insert(0, "")
         self.work_time_input_label.place(x=25, y=178)
         self.work_time_input.place(anchor="ne", x=350,y=178)
 
-        self.break_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)
-        self.break_time_input_label = ctk.CTkLabel(self, text="Break in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")
+        self.break_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)     #break in minutes input, which means which means its the box that you can have user input
+        self.break_time_input_label = ctk.CTkLabel(self, text="Break in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")    #label/header for break in minutes
         self.break_time_input.insert(0, "")
         self.break_time_input_label.place(x=20, y=225)
         self.break_time_input.place(anchor="ne",x=350,y=225)
