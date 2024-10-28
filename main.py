@@ -2,9 +2,9 @@
 #which means still has the limited capabilities as tkinter, which custtomtkinter adds modern aethestics, which means it doesn't 
 #extend core functionalities
 
-import customtkinter as ctk  # Import customtkinter
-from CTkListbox import *
-from tkinter import messagebox
+import customtkinter as ctk             # changed from tkinter to customtkinter
+from CTkListbox import *                # separate library from customtkinter, extension for customtkinter in making listboxs
+from CTkMessagebox import CTkMessagebox # Import CTkMessagebox instead of messagebox
 from tkinter import PhotoImage
 import time
 import threading
@@ -23,31 +23,32 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         self.geometry("400x500")
         self.config(bg="#000000")
         self.resizable(False, False)  # This disables the option for fullscreen mode
-        icon = PhotoImage(file='icon.png')  # Icon initialization
-        self.iconphoto(False, icon)  # applying Icon
+        self.icon = PhotoImage(file='icon.png')  # Icon initialization
+        self.iconphoto(False, self.icon)  # applying Icon
         self.default_work_time = 25 * 60  # Default: 25 minutes in seconds
         self.default_break_time = 5 * 60  # Default: 5 minutes in seconds
         self.current_time = self.default_work_time
         self.is_work_time = True
         self.timer_running = False
         self.completed_cycles = 0
-        
+        self.task_array = []
+
         # Cycle Counter
         self.cycle_counter_label = ctk.CTkLabel(self, text=f"Cycles: {self.completed_cycles}", bg_color="#000000", text_color="#ffd700")
         self.cycle_counter_label.place(x=320, y=10)
 
         # Timer Display
-        self.timer_label = ctk.CTkLabel(self, text=self.format_time(self.current_time), font=("Roboto", 48),fg_color="#000000",bg_color="#000000",text_color="#ffd700")
-        self.timer_label.place(x=145, y=40)  # creates space between top and bottom
+        self.timer_label = ctk.CTkLabel(self, text=self.format_time(self.current_time), font=("Roboto", 48),fg_color="#000000",bg_color="#000000",text_color="#ffd700")     #root label of clock timer, it also contains aethetics attributes
+        self.timer_label.place(x=145, y=40)  #Top placement using x and y coordinates
 
         # Start/Stop Button
         self.start_stop_button = ctk.CTkButton(self, text="Start",text_color="#000000", command=self.toggle_timer, fg_color="#ffd700",bg_color="#000000",corner_radius=30)
         self.start_stop_button.pack(pady=110)
-        self.start_stop_button.configure(width=75, height=30)  # ctk uses 'configure' for options
+        self.start_stop_button.configure(width=75, height=30) 
 
         # Timer Customization
-        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #work in minutes input, which means its the box that you can have user input
-        self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")      #label/header for work in minutes, 
+        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #root of work in minutes input, it also contains aethetics attributes
+        self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")      #root of label for work in minutes, it also cantains design attribute
         self.work_time_input.insert(0, "")
         self.work_time_input_label.place(x=25, y=178)
         self.work_time_input.place(anchor="ne", x=350,y=178)
@@ -74,9 +75,9 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         add_task_button.configure(width=75, height=20)
 
         # Task List
-        self.task_list = CTkListbox(self, justify="center", font=("Arial", 20),width=300,height=50,bg_color="#1e1e1e",border_color="#1e1e1e",fg_color="#1e1e1e")
+        self.task_list = CTkListbox(self, justify="center", font=("Arial", 20), width=300, height=50, bg_color="#1e1e1e", border_color="#1e1e1e", fg_color="#1e1e1e")
         self.task_list.pack(fill="x", expand=True)
-        self.task_list.place(x=40,y=410)
+        self.task_list.place(x=40, y=410)
 
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -117,13 +118,31 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
             self.current_time = self.default_work_time
             self.timer_label.configure(text=self.format_time(self.current_time))
         except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid numbers.")
+            CTkMessagebox(title="Invalid Input", message="Please enter valid numbers.")
 
     def add_task(self):
-        task_text = self.task_input.get()
+        task_text = self.task_input.get().strip()
         if task_text:
-            self.task_list.insert(ctk.END, task_text)
+            # Add task to the array
+            self.task_array.append(task_text)
+            # Update the Listbox display
+            self.update_task_list_display()
+            # Clear input field
             self.task_input.delete(0, ctk.END)
+
+    def update_task_list_display(self):
+        # Clear the Listbox
+        self.task_list.delete(0, ctk.END)
+        # Insert all tasks from the array into the Listbox
+        for task in self.task_array:
+            self.task_list.insert(ctk.END, task)
+
+    def remove_task(self, index):
+        # Remove task from array if index is valid
+        if 0 <= index < len(self.task_array):
+            del self.task_array[index]
+            # Update Listbox display
+            self.update_task_list_display()
 
     def show_alarm(self):
         self.timer_running = False
@@ -131,18 +150,19 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         pygame.mixer.Sound.play(alarm_sound)
 
         # Alarm notification
-        messagebox.showinfo("Time's Up", "The timer has ended!")
-
-        # Switch between work and break time
-        self.is_work_time = not self.is_work_time
-        self.current_time = self.default_work_time if self.is_work_time else self.default_break_time
-        if self.is_work_time:
-            self.completed_cycles += 1
-            self.cycle_counter_label.configure(text=f"Cycles: {self.completed_cycles}")
-        self.timer_label.configure(text=self.format_time(self.current_time))
-        pygame.mixer.stop()
-        self.timer_running = True  # makes sure that once clicking okay on the messagebox 
-        self.run_timer()           # It goes to the next timer whether work to break vice versa
+        msg = CTkMessagebox(title="Time's Up", message="The timer has ended!",option_1="confirm")
+        responses = msg.get()
+        if responses == "confirm":
+            # Switch between work and break time
+            self.is_work_time = not self.is_work_time
+            self.current_time = self.default_work_time if self.is_work_time else self.default_break_time
+            if self.is_work_time:
+                self.completed_cycles += 1
+                self.cycle_counter_label.configure(text=f"Cycles: {self.completed_cycles}")
+            self.timer_label.configure(text=self.format_time(self.current_time))
+            pygame.mixer.stop()
+            self.timer_running = True  # makes sure that once clicking okay on the messagebox 
+            self.run_timer()           # It goes to the next timer whether work to break vice versa
 
     def on_closing(self):
         self.timer_running = False
