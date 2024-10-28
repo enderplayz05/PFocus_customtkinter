@@ -50,14 +50,14 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #root of work in minutes input, it also contains aethetics attributes
         self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")      #root of label for work in minutes, it also cantains design attribute
         self.work_time_input.insert(0, "")
-        self.work_time_input_label.place(x=25, y=178)
-        self.work_time_input.place(anchor="ne", x=350,y=178)
+        self.work_time_input_label.place(x=25, y=178)               #places the break in minutes on middle left, also in same alignment               
+        self.work_time_input.place(anchor="ne", x=350,y=178)        #places the INPUT break in minutes on middle right, also in same alignment
 
-        self.break_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)     #break in minutes input, which means which means its the box that you can have user input
-        self.break_time_input_label = ctk.CTkLabel(self, text="Break in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")    #label/header for break in minutes
-        self.break_time_input.insert(0, "")
-        self.break_time_input_label.place(x=20, y=225)
-        self.break_time_input.place(anchor="ne",x=350,y=225)
+        self.break_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)     #root of break in minutes input, which means which means its the box that you can have user input
+        self.break_time_input_label = ctk.CTkLabel(self, text="Break in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")    #root of label for break in minutes
+        self.break_time_input.insert(0, "")                     
+        self.break_time_input_label.place(x=20, y=225)              #places the break in minutes on middle left 
+        self.break_time_input.place(anchor="ne",x=350,y=225)        #places the INPUT break in minutes on middle right
 
         set_timer_button = ctk.CTkButton(self, text="Set Timer", text_color="#000000",command=self.set_custom_times,fg_color="#ffd700",bg_color="#000000",corner_radius=30)
         set_timer_button.place(y=265,x=165)
@@ -81,7 +81,7 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
 
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    def format_time(self, seconds):
+    def format_time(self, seconds):                     #function formats time to MM:SS
         minutes, seconds = divmod(seconds, 60)
         return f"{int(minutes):02}:{int(seconds):02}"
 
