@@ -15,7 +15,7 @@ from pygame import mixer
 pygame.mixer.init()
 alarm_sound = pygame.mixer.Sound("alarm.wav")
 
-class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
+class PomodoroApp(ctk.CTk):  
 
     def __init__(self):
         super().__init__()
@@ -47,45 +47,45 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         self.start_stop_button.configure(width=75, height=30) 
 
         # Timer Customization
-        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #root of work in minutes input, it also contains aethetics attributes
+        self.work_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)      #root of work in minutes input, it also contains design attributes
         self.work_time_input_label = ctk.CTkLabel(self, text="Work in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")      #root of label for work in minutes, it also cantains design attribute
-        self.work_time_input.insert(0, "")
+        self.work_time_input.insert(0, "")                          #where user types the work in minutes
         self.work_time_input_label.place(x=25, y=178)               #places the break in minutes on middle left, also in same alignment               
         self.work_time_input.place(anchor="ne", x=350,y=178)        #places the INPUT break in minutes on middle right, also in same alignment
 
         self.break_time_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)     #root of break in minutes input, which means which means its the box that you can have user input
         self.break_time_input_label = ctk.CTkLabel(self, text="Break in Minutes", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")    #root of label for break in minutes
-        self.break_time_input.insert(0, "")                     
+        self.break_time_input.insert(0, "")                         #where user types the break in minutes
         self.break_time_input_label.place(x=20, y=225)              #places the break in minutes on middle left 
         self.break_time_input.place(anchor="ne",x=350,y=225)        #places the INPUT break in minutes on middle right
 
-        set_timer_button = ctk.CTkButton(self, text="Set Timer", text_color="#000000",command=self.set_custom_times,fg_color="#ffd700",bg_color="#000000",corner_radius=30)
-        set_timer_button.place(y=265,x=165)
-        set_timer_button.configure(width=60, height=20)
+        set_timer_button = ctk.CTkButton(self, text="Set Timer", text_color="#000000",command=self.set_custom_times,fg_color="#ffd700",bg_color="#000000",corner_radius=30)     #root of timer button, has design attributes
+        set_timer_button.place(y=265,x=165)                         #places on the center of the entire window
+        set_timer_button.configure(width=60, height=20)             #size of the set timer button
 
         # Task Input
-        self.task_input_label = ctk.CTkLabel(self, text="ADD A TASK", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")
-        self.task_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)
-        self.task_input.insert(0, "")
-        self.task_input_label.place(x=30, y=325)
-        self.task_input.place(anchor="ne", x=350, y=325)
+        self.task_input_label = ctk.CTkLabel(self, text="ADD A TASK", text_color="#ffd700",font=("Arial", 14),fg_color="#000000",bg_color="#000000")                            #root of label for add a task,, also contains design attributes 
+        self.task_input = ctk.CTkEntry(self, font=('Arial', 20), width=180,fg_color="#1e1e1e",bg_color="#000000",border_color="#000000",corner_radius=30)                       #root of task input, also contains design attributes
+        self.task_input.insert(0, "")                       #where user types the task
+        self.task_input_label.place(x=30, y=325)            #places the add a task label on the bottom center 
+        self.task_input.place(anchor="ne", x=350, y=325)    #places the task input near the bottom on the right
 
-        add_task_button = ctk.CTkButton(self, text="Add Task", text_color="#000000",command=self.add_task,fg_color="#ffd700",bg_color="#000000",corner_radius=30)
-        add_task_button.place(x=150,y=370)
-        add_task_button.configure(width=75, height=20)
+        add_task_button = ctk.CTkButton(self, text="Add Task", text_color="#000000",command=self.add_task,fg_color="#ffd700",bg_color="#000000",corner_radius=30)           #root of add task button, also has attributes       
+        add_task_button.place(x=150,y=370)                          #place the button near the bottom
+        add_task_button.configure(width=75, height=20)              #size of the add tasj button
 
         # Task List
         self.task_list = CTkListbox(self, justify="center", font=("Arial", 20), width=300, height=50, bg_color="#1e1e1e", border_color="#1e1e1e", fg_color="#1e1e1e")
-        self.task_list.pack(fill="x", expand=True)
-        self.task_list.place(x=40, y=410)
+        self.task_list.pack(fill="x", expand=True)      #this makes sure that it expands the table where the tak are
+        self.task_list.place(x=40, y=410)               #place the task table at the bottom
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)          #garbage collection
 
     def format_time(self, seconds):                     #function formats time to MM:SS
         minutes, seconds = divmod(seconds, 60)
         return f"{int(minutes):02}:{int(seconds):02}"
 
-    def toggle_timer(self):
+    def toggle_timer(self):                             #function to determine when time is running
         if self.timer_running:
             self.timer_running = False
             self.start_stop_button.configure(text="Start")
@@ -94,7 +94,7 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
             self.start_stop_button.configure(text="Pause")
             self.run_timer()
 
-    def run_timer(self):
+    def run_timer(self):                               #handles count down; when true, starts timer only if self.timer_running is true and the current time is greater than 0, if it is then timer will go down in seconds
         def update_timer():
             while self.timer_running and self.current_time > 0:
                 self.current_time -= 1
@@ -104,7 +104,7 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
             if self.current_time <= 0:
                 self.show_alarm()
 
-        timer_thread = threading.Thread(target=update_timer)
+        timer_thread = threading.Thread(target=update_timer)            #makes sure to update the timer
         timer_thread.start()
 
     def set_custom_times(self):
@@ -120,7 +120,7 @@ class PomodoroApp(ctk.CTk):  # Inherit from ctk.CTk instead of tk.Tk
         except ValueError:
             CTkMessagebox(title="Invalid Input", message="Please enter valid numbers.")
 
-    def add_task(self):
+    def add_task(self):                             #function for adding a task
         task_text = self.task_input.get().strip()
         if task_text:
             # Add task to the array
